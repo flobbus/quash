@@ -58,7 +58,7 @@ class Executive{
 					inFile.open(m_fileName);
 					//[input from file]    ←-----------------------------------
 					
-                          		std::string line;
+                    std::string line;
 					std::getline (inFile,line);
 					while(line != ""){
 						for(int i = 0; i < line.length(); i++){
@@ -80,7 +80,7 @@ class Executive{
 
 						}
 					} 
-                          	 
+                         	 
 					inFile.close();
 				}
 
