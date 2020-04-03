@@ -57,6 +57,30 @@ class Executive{
 					std::ifstream inFile;
 					inFile.open(m_fileName);
 					//[input from file]    ←-----------------------------------
+					
+                          		std::string line;
+					std::getline (inFile,line);
+					while(line != ""){
+						for(int i = 0; i < line.length(); i++){
+							if(i==(line.length()-1)){
+								std::string word;
+								word = line;
+								printf("pushed \"%s\"\n",word.c_str());
+								kyoo.push(word);
+								line="";
+							}
+							else if(line[i]==' '){
+								std::string word;
+								word = line.substr(0,i);
+								line.erase(0,i+1);
+								printf("pushed \"%s\"\n",word.c_str());
+								kyoo.push(word);
+								i=0;
+							}
+
+						}
+					} 
+                          	 
 					inFile.close();
 				}
 
