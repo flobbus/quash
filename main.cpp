@@ -27,8 +27,6 @@ class Executive{
 			for(;;){
 				std::string tempKey = "";
 				std::queue<std::string> kyoo;
-				std::queue<std::string>().swap(kyoo);
-				//while(!kyoo.empty()) {kyoo.pop();}
 				printf("\n$ ");
 				if(!m_file){
 					std::string line= "";
@@ -224,6 +222,7 @@ class Executive{
 					//printf("%s: command not found\n", tempKey.c_str());
 				}
 
+				while(!kyoo.empty()) {kyoo.pop();}
 
 				}
 stop:;
