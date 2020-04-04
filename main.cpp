@@ -170,10 +170,7 @@ class Executive{
 					//printf("%s: command not found\n", tempKey.c_str());
 				}
 
-				else if(tempKey=="exit"){
-					goto stop;
-				}
-				else if(tempKey=="quit"){
+				else if((tempKey=="exit")||(tempKey=="quit")){
 					goto stop;
 				}
 				else if(tempKey=="pipe"){
