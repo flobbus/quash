@@ -33,29 +33,35 @@ class Executive{
 				std::queue<std::string> kyoo;
 				printf("\n$ ");
 				std::string line= "";
+				std::string word="";
 				bool ampersand = false;
 				(m_file) ? std::getline (inFile,line) : std::getline (std::cin,line); 
 				(m_file) ? printf("%s\n", line.c_str()) : printf("");
 				while(line != ""){
 					for(int i = 0; i < line.length(); i++){
 						if(i==(line.length()-1)){
-							std::string word="";
 							word = line;
 							if((word=="&")||(word=="& "))
 								ampersand = true;
+							else if (word=="|"){
+								printf("attempting to establish pipe\n");
+								line = "";
+							}
 							else 
 								kyoo.push(word);
 							line="";
 						}
 						else if(line[i]==' '){
-							std::string word="";
 							word = line.substr(0,i);
 							line.erase(0,i+1);
-							//	printf("pushed \"%s\"\n",word.c_str());
-							kyoo.push(word);
+							if (word=="|"){
+								printf("attempting to establish pipe\n");
+								line = "";
+							}
+							else //	printf("pushed \"%s\"\n",word.c_str());
+								kyoo.push(word);
 							i=0;
 						}
-
 					}
 				}
 
