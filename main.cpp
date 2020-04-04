@@ -198,14 +198,8 @@ class Executive{
 
 
 		int main(int argc, char **argv, char **envp){
-			if(argc>1){
-				Executive myExec(argv[1]);
-				myExec.run(envp);
-			}
-			else{
-				Executive myExec;
-				myExec.run(envp);
-			}
+			(argc>1) ? Executive myExec(argv[1]) :  Executive myExec;
+		        myExec.run(envp);
 			return 0;
 		}
 
