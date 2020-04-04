@@ -1,8 +1,8 @@
 quash: main.o 
-	g++ -g -Wall main.o -o quash 
+	g++ -g main.o -o quash 
 
 main.o: main.cpp
-	g++ -g -Wall -c main.cpp
+	g++ -g -c main.cpp
 
 clean:
-	rm quash 
+	rm *.o  quash 
