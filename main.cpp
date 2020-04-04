@@ -33,6 +33,7 @@ class Executive{
 				std::queue<std::string> kyoo;
 				printf("\n$ ");
 				std::string line= "";
+				bool ampersand = false;
 				(m_file) ? std::getline (inFile,line) : std::getline (std::cin,line); 
 				(m_file) ? printf("%s\n", line.c_str()) : printf("");
 				while(line != ""){
@@ -40,7 +41,10 @@ class Executive{
 						if(i==(line.length()-1)){
 							std::string word="";
 							word = line;
-							kyoo.push(word);
+							if((word=="&")||(word=="& "))
+								ampersand = true;
+							else 
+								kyoo.push(word);
 							line="";
 						}
 						else if(line[i]==' '){
@@ -179,7 +183,8 @@ class Executive{
 						exit(0);
 					}
 					else{ //adult
-						wait(NULL);
+						if(!ampersand)
+							wait(NULL);
 
 					}
 				}
