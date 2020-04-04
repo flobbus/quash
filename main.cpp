@@ -27,7 +27,7 @@ class Executive{
 			for(;;){
 				std::string tempKey;
 				std::queue<std::string> kyoo;
-				printf("reset loop\n");
+				printf("\n$ ");
 				if(!m_file){
 					std::string line;
 					std::getline (std::cin,line);
@@ -126,6 +126,9 @@ class Executive{
 						printf("Incorrect syntax\n");
 					}
 
+					while(!kyoo.empty()){
+						kyoo.pop();
+					}
 				}
 				else if(tempKey=="cd"){
 					if(kyoo.empty()){
@@ -141,10 +144,40 @@ class Executive{
 							printf(" failed\n");
 						}
 					}
+					while(!kyoo.empty()){
+						kyoo.pop();
+					}
 				}
 				else if(tempKey=="jobs"){
+					printf("Entered the jobs fork branch\n");
+					pid_t pid = fork();
+					if(pid < 0){
+						printf("error in fork");
+						exit(0);
+					}
+					else if(pid == 0){ //child
+						//make an array of char pointers for each argument to be applied in execvpe()
+						char** execargs = new char*[2];
+						char *c_string = new char[tempKey.length()+1];
+						for (int i = 0; i < tempKey.length(); i++){
+							c_string[i] = tempKey[i];
+						}
+						c_string[tempKey.length()] = '\0';
+						execargs[0] = "/bin/ps";
+						execargs[1] =  (char*)NULL;
+						execvpe(execargs[0], execargs, envp);
+					}
+					else{ //adult
+						wait(NULL);
 
+						while(!kyoo.empty()){
+							kyoo.pop();
+						}
+					}
+
+					//printf("%s: command not found\n", tempKey.c_str());
 				}
+
 				else if(tempKey=="exit"){
 					goto stop;
 				}
@@ -191,15 +224,15 @@ class Executive{
 					else{ //adult
 						wait(NULL);
 
+						while(!kyoo.empty()){
+							kyoo.pop();
+						}
 					}
 
 					//printf("%s: command not found\n", tempKey.c_str());
 				}
 
 
-				while(!kyoo.empty()){
-					kyoo.pop();
-				}
 				}
 stop:;
 			}
