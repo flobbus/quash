@@ -32,62 +32,33 @@ class Executive{
 				std::string tempKey = "";
 				std::queue<std::string> kyoo;
 				printf("\n$ ");
-				if(!m_file){
-					std::string line= "";
-					std::getline (std::cin,line);
-					while(line != ""){
-						for(int i = 0; i < line.length(); i++){
-							if(i==(line.length()-1)){
-								std::string word="";
-								word = line;
-							//	printf("pushed \"%s\"\n",word.c_str());
-								kyoo.push(word);
-								line="";
-							}
-							else if(line[i]==' '){
-								std::string word="";
-								word = line.substr(0,i);
-								line.erase(0,i+1);
-							//	printf("pushed \"%s\"\n",word.c_str());
-								kyoo.push(word);
-								i=0;
-							}
-
+				std::string line= "";
+				(m_file) ? std::getline (inFile,line) : std::getline (std::cin,line); 
+				(m_file) ? printf("%s\n", line.c_str()) : printf("");
+				while(line != ""){
+					for(int i = 0; i < line.length(); i++){
+						if(i==(line.length()-1)){
+							std::string word="";
+							word = line;
+							kyoo.push(word);
+							line="";
 						}
+						else if(line[i]==' '){
+							std::string word="";
+							word = line.substr(0,i);
+							line.erase(0,i+1);
+							//	printf("pushed \"%s\"\n",word.c_str());
+							kyoo.push(word);
+							i=0;
+						}
+
 					}
-				}
-				else
-				{
-					//[input from file]    ←-----------------------------------
-					
-                    std::string line;
-					std::getline (inFile,line);
-					printf("%s\n",line.c_str());
-					while(line != ""){
-						for(int i = 0; i < line.length(); i++){
-							if(i==(line.length()-1)){
-								std::string word;
-								word = line;
-								kyoo.push(word);
-								line="";
-							}
-							else if(line[i]==' '){
-								std::string word;
-								word = line.substr(0,i);
-								line.erase(0,i+1);
-								kyoo.push(word);
-								i=0;
-							}
-
-						}
-					} 
-                         	 
 				}
 
 				tempKey = kyoo.front();
 				kyoo.pop();  
 				if(tempKey=="set"){
-				//	printf("entered set branch\n");
+					//	printf("entered set branch\n");
 					if(!kyoo.empty()){
 						tempKey = kyoo.front();
 						kyoo.pop();
@@ -143,7 +114,7 @@ class Executive{
 					}
 				}
 				else if(tempKey=="jobs"){
-				//	printf("Entered the jobs fork branch\n");
+					//	printf("Entered the jobs fork branch\n");
 					pid_t pid = fork();
 					if(pid < 0){
 						printf("error in fork");
@@ -173,7 +144,7 @@ class Executive{
 				}
 				else{
 					//if((tempKey.at(0) == '.')&&(tempKey.at(1) == '/')){
-				//	printf("Entered the execution fork branch\n");
+					//	printf("Entered the execution fork branch\n");
 					pid_t pid = fork();
 					if(pid < 0){
 						printf("error in fork");
@@ -188,7 +159,7 @@ class Executive{
 						}
 						c_string[tempKey.length()] = '\0';
 						execargs[0] =  c_string;
-					//	printf("argument %d is %s\n",0, tempKey.c_str());
+						//	printf("argument %d is %s\n",0, tempKey.c_str());
 						int counter = 1;
 						while(!kyoo.empty()){
 							tempKey = kyoo.front();
@@ -199,7 +170,7 @@ class Executive{
 							}
 							c_string[tempKey.length()] = '\0';
 							execargs[counter] =  c_string;
-					//		printf("argument %d is %s\n",counter, tempKey.c_str());
+							//		printf("argument %d is %s\n",counter, tempKey.c_str());
 							counter++;
 						}
 						execargs[counter] =  (char*)NULL;
@@ -211,15 +182,13 @@ class Executive{
 						wait(NULL);
 
 					}
-
-					//printf("%s: command not found\n", tempKey.c_str());
 				}
 
 				while(!kyoo.empty()) {kyoo.pop();}
 
 				}
-stop:;
-					inFile.close();
+				stop:;
+				inFile.close();
 
 			}
 
