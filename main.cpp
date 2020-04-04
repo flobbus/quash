@@ -25,26 +25,28 @@ class Executive{
 
 		void run(char **envp){
 			for(;;){
-				std::string tempKey;
+				std::string tempKey = "";
 				std::queue<std::string> kyoo;
+				std::queue<std::string>().swap(kyoo);
+				//while(!kyoo.empty()) {kyoo.pop();}
 				printf("\n$ ");
 				if(!m_file){
-					std::string line;
+					std::string line= "";
 					std::getline (std::cin,line);
 					while(line != ""){
 						for(int i = 0; i < line.length(); i++){
 							if(i==(line.length()-1)){
-								std::string word;
+								std::string word="";
 								word = line;
-								printf("pushed \"%s\"\n",word.c_str());
+							//	printf("pushed \"%s\"\n",word.c_str());
 								kyoo.push(word);
 								line="";
 							}
 							else if(line[i]==' '){
-								std::string word;
+								std::string word="";
 								word = line.substr(0,i);
 								line.erase(0,i+1);
-								printf("pushed \"%s\"\n",word.c_str());
+							//	printf("pushed \"%s\"\n",word.c_str());
 								kyoo.push(word);
 								i=0;
 							}
@@ -126,9 +128,6 @@ class Executive{
 						printf("Incorrect syntax\n");
 					}
 
-					while(!kyoo.empty()){
-						kyoo.pop();
-					}
 				}
 				else if(tempKey=="cd"){
 					if(kyoo.empty()){
@@ -144,12 +143,9 @@ class Executive{
 							printf(" failed\n");
 						}
 					}
-					while(!kyoo.empty()){
-						kyoo.pop();
-					}
 				}
 				else if(tempKey=="jobs"){
-					printf("Entered the jobs fork branch\n");
+				//	printf("Entered the jobs fork branch\n");
 					pid_t pid = fork();
 					if(pid < 0){
 						printf("error in fork");
@@ -166,13 +162,11 @@ class Executive{
 						execargs[0] = "/bin/ps";
 						execargs[1] =  (char*)NULL;
 						execvpe(execargs[0], execargs, envp);
+						exit(0);
 					}
 					else{ //adult
 						wait(NULL);
 
-						while(!kyoo.empty()){
-							kyoo.pop();
-						}
 					}
 
 					//printf("%s: command not found\n", tempKey.c_str());
@@ -189,7 +183,7 @@ class Executive{
 				}
 				else{
 					//if((tempKey.at(0) == '.')&&(tempKey.at(1) == '/')){
-					printf("Entered the execution fork branch\n");
+				//	printf("Entered the execution fork branch\n");
 					pid_t pid = fork();
 					if(pid < 0){
 						printf("error in fork");
@@ -204,7 +198,7 @@ class Executive{
 						}
 						c_string[tempKey.length()] = '\0';
 						execargs[0] =  c_string;
-						printf("argument %d is %s\n",0, tempKey.c_str());
+					//	printf("argument %d is %s\n",0, tempKey.c_str());
 						int counter = 1;
 						while(!kyoo.empty()){
 							tempKey = kyoo.front();
@@ -215,18 +209,16 @@ class Executive{
 							}
 							c_string[tempKey.length()] = '\0';
 							execargs[counter] =  c_string;
-							printf("argument %d is %s\n",counter, tempKey.c_str());
+					//		printf("argument %d is %s\n",counter, tempKey.c_str());
 							counter++;
 						}
 						execargs[counter] =  (char*)NULL;
 						execvpe(execargs[0], execargs, envp);
+						exit(0);
 					}
 					else{ //adult
 						wait(NULL);
 
-						while(!kyoo.empty()){
-							kyoo.pop();
-						}
 					}
 
 					//printf("%s: command not found\n", tempKey.c_str());
@@ -235,6 +227,7 @@ class Executive{
 
 				}
 stop:;
+
 			}
 
 		};
