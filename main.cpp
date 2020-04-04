@@ -178,6 +178,8 @@ class Executive{
 							counter++;
 						}
 						execargs[counter] =  (char*)NULL;
+						if(ampersand)
+							printf("attempting to initiate background process ");
 						execvpe(execargs[0], execargs, envp);
 						printf("%s: command not found\n", execargs[0]);
 						exit(0);
@@ -185,7 +187,6 @@ class Executive{
 					else{ //adult
 						if(!ampersand)
 							wait(NULL);
-
 					}
 				}
 
