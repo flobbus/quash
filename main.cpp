@@ -24,6 +24,10 @@ class Executive{
 		};
 
 		void run(char **envp){
+			std::ifstream inFile;
+			if(m_file){
+				inFile.open(m_fileName);
+			}
 			for(;;){
 				std::string tempKey = "";
 				std::queue<std::string> kyoo;
@@ -54,18 +58,16 @@ class Executive{
 				}
 				else
 				{
-					std::ifstream inFile;
-					inFile.open(m_fileName);
 					//[input from file]    ←-----------------------------------
 					
                     std::string line;
 					std::getline (inFile,line);
+					printf("%s\n",line.c_str());
 					while(line != ""){
 						for(int i = 0; i < line.length(); i++){
 							if(i==(line.length()-1)){
 								std::string word;
 								word = line;
-								printf("pushed \"%s\"\n",word.c_str());
 								kyoo.push(word);
 								line="";
 							}
@@ -73,7 +75,6 @@ class Executive{
 								std::string word;
 								word = line.substr(0,i);
 								line.erase(0,i+1);
-								printf("pushed \"%s\"\n",word.c_str());
 								kyoo.push(word);
 								i=0;
 							}
@@ -81,13 +82,12 @@ class Executive{
 						}
 					} 
                          	 
-					inFile.close();
 				}
 
 				tempKey = kyoo.front();
 				kyoo.pop();  
 				if(tempKey=="set"){
-					printf("entered set branch\n");
+				//	printf("entered set branch\n");
 					if(!kyoo.empty()){
 						tempKey = kyoo.front();
 						kyoo.pop();
@@ -152,11 +152,6 @@ class Executive{
 					else if(pid == 0){ //child
 						//make an array of char pointers for each argument to be applied in execvpe()
 						char** execargs = new char*[2];
-						char *c_string = new char[tempKey.length()+1];
-						for (int i = 0; i < tempKey.length(); i++){
-							c_string[i] = tempKey[i];
-						}
-						c_string[tempKey.length()] = '\0';
 						execargs[0] = "/bin/ps";
 						execargs[1] =  (char*)NULL;
 						execvpe(execargs[0], execargs, envp);
@@ -209,6 +204,7 @@ class Executive{
 						}
 						execargs[counter] =  (char*)NULL;
 						execvpe(execargs[0], execargs, envp);
+						printf("%s: command not found\n", execargs[0]);
 						exit(0);
 					}
 					else{ //adult
@@ -223,6 +219,7 @@ class Executive{
 
 				}
 stop:;
+					inFile.close();
 
 			}
 
